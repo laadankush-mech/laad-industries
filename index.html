@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Laad Industries – Precision Manufacturing & Engineering</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent-gold: #f7b731;
+            --accent-orange: #fc5c65;
+            --accent-teal: #2bcbba;
+            --accent-purple: #a55eea;
+            --accent-blue: #45aaf2;
+            --accent-pink: #eb3b5a;
+            --light: #f8f9fa;
+            --white: #ffffff;
+            --dark: #0f0f1a;
+            --card-min-height: 180px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #2c3e50;
+            line-height: 1.5;
+            overflow-x: hidden;
+            background: var(--light);
+            -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* SCROLL PROGRESS BAR */
+        #progressBar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-orange), var(--accent-pink), var(--accent-purple));
+            width: 0%;
+            z-index: 2000;
+            transition: width 0.2s;
+        }
+
+        /* PRELOADER */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            transition: opacity 0.8s ease, visibility 0.8s;
+            gap: 0.8rem;
+        }
+        #preloader.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .loader-gear {
+            font-size: 3.5rem;
+            color: var(--accent-gold);
+            animation: spinGear 2s linear infinite;
+        }
+        .loader-text {
+            color: var(--white);
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes spinGear {
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes borderGlow {
+            0%, 100% { border-color: var(--accent-gold); box-shadow: 0 0 8px rgba(247, 183, 49, 0.2); }
+            25% { border-color: var(--accent-orange); box-shadow: 0 0 8px rgba(252, 92, 101, 0.2); }
+            50% { border-color: var(--accent-teal); box-shadow: 0 0 8px rgba(43, 203, 186, 0.2); }
+            75% { border-color: var(--accent-purple); box-shadow: 0 0 8px rgba(165, 94, 234, 0.2); }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-out;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* NAVIGATION */
+        nav {
+            background: rgba(15, 15, 26, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 0.8rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1500;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            height: 56px;
+        }
+        nav.scrolled {
+            background: rgba(15, 15, 26, 0.98);
+            padding: 0.5rem 5%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            height: 48px;
+        }
+        .logo {
+            font-size: 1.1rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        nav.scrolled .logo {
+            font-size: 1rem;
+        }
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 1.2rem;
+            margin: 0;
+            padding: 0;
+        }
+        .nav-links li {
+            list-style: none;
+        }
+        .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+            position: relative;
+            padding: 0.3rem 0;
+            transition: color 0.3s;
+            white-space: nowrap;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-gold);
+            transition: width 0.3s;
+            border-radius: 2px;
+        }
+        .nav-links a:hover::after,
+        .nav-links a:focus::after {
+            width: 100%;
+        }
+        .nav-links a:hover,
+        .nav-links a:focus {
+            color: var(--accent-gold);
+        }
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+            padding: 5px;
+            background: none;
+            border: none;
+        }
+        .hamburger span {
+            width: 24px;
+            height: 2.5px;
+            background: var(--accent-gold);
+            border-radius: 3px;
+            transition: 0.3s;
+            display: block;
+        }
+
+        /* HERO */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 5%;
+            margin-top: 56px;
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #1a1a2e 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            overflow: hidden;
+        }
+        .hero canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            color: white;
+            padding: 2rem 0;
+        }
+        .hero h1 {
+            font-size: clamp(2.2rem, 8vw, 4.5rem);
+            margin-bottom: 0.3rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-orange), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero h2 {
+            font-size: clamp(1.2rem, 4vw, 2rem);
+            font-weight: 300;
+            color: var(--accent-teal);
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+        .hero p {
+            font-size: clamp(0.85rem, 3vw, 1.2rem);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            color: #cbd5e1;
+            padding: 0 0.5rem;
+        }
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-orange));
+            color: #fff;
+            padding: 0.75rem 2rem;
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 50px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(247,183,49,0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            letter-spacing: 0.5px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border: none;
+        }
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        /* SECTIONS */
+        section {
+            padding: 4rem 4%;
+            position: relative;
+        }
+        .section-title {
+            text-align: center;
+            font-size: clamp(1.6rem, 5vw, 2.2rem);
+            margin-bottom: 2.5rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            position: relative;
+            background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            padding: 0 1rem;
+        }
+        .section-title::after {
+            content: '';
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-orange), var(--accent-pink), var(--accent-purple));
+            display: block;
+            margin: 0.5rem auto 0;
+            border-radius: 2px;
+        }
+
+        /* SECTION BACKGROUNDS */
+        #about {
+            background: linear-gradient(180deg, #f8f9fa 0%, #e8f4f8 100%);
+        }
+        #machines {
+            background: linear-gradient(135deg, #fff5f5 0%, #fff0e6 50%, #fffde6 100%);
+        }
+        #services {
+            background: linear-gradient(180deg, #f0f4ff 0%, #f5f0ff 100%);
+        }
+        #gallery {
+            background: linear-gradient(135deg, #e6ffe6 0%, #e6f7ff 50%, #fff0f5 100%);
+        }
+        #contact {
+            background: linear-gradient(180deg, #f8f9fa 0%, #fff 100%);
+        }
+
+        /* STATS */
+        .stats-section {
+            background: linear-gradient(135deg, #1a1a2e, #0f3460);
+            padding: 3rem 4%;
+        }
+        .stats-section .section-title {
+            color: #fff;
+            -webkit-text-fill-color: #fff;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .stat-item {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 1.5rem 1rem;
+            border-radius: 16px;
+            border: 1.5px solid rgba(255,255,255,0.15);
+            transition: all 0.3s;
+            animation: borderGlow 4s infinite;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 120px;
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+            line-height: 1;
+        }
+        .stat-label {
+            font-weight: 500;
+            color: #cbd5e1;
+            margin-top: 0.4rem;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        /* ABOUT */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .about-text, .firm-details {
+            background: var(--white);
+            padding: 1.8rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+            transition: transform 0.3s;
+            min-height: var(--card-min-height);
+            display: flex;
+            flex-direction: column;
+        }
+        .about-text {
+            border-left: 4px solid var(--accent-gold);
+        }
+        .firm-details {
+            background: linear-gradient(135deg, #fff 0%, #f0f4ff 100%);
+            border-left: 4px solid var(--accent-teal);
+        }
+        .about-highlight {
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-orange));
+            color: #fff;
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        .about-text ul {
+            margin-top: 0.8rem;
+            list-style: none;
+            padding-left: 0;
+            flex-grow: 1;
+        }
+        .about-text ul li {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .firm-details p {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        .firm-details i {
+            color: var(--accent-teal);
+            width: 20px;
+            text-align: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        /* UNIFORM CARDS */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* MACHINES */
+        .machine-card {
+            background: var(--white);
+            padding: 1.2rem 0.8rem;
+            border-radius: 14px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.04);
+            text-align: center;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 120px;
+            border-left: 3px solid var(--accent-teal);
+        }
+        .machine-card:nth-child(even) {
+            border-left-color: var(--accent-purple);
+        }
+        .machine-card:active {
+            transform: scale(0.97);
+        }
+        .machine-card h3 {
+            color: var(--primary);
+            margin-bottom: 0.4rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+        .machine-card .spec {
+            font-size: 0.8rem;
+            color: #555;
+            background: #fef5e7;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            display: inline-block;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        /* SERVICES */
+        .service-card {
+            background: var(--white);
+            padding: 1.5rem 0.8rem;
+            border-radius: 14px;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.04);
+            transition: all 0.3s;
+            border-top: 3px solid transparent;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 140px;
+        }
+        .service-card:nth-child(1) { border-top-color: var(--accent-orange); }
+        .service-card:nth-child(2) { border-top-color: var(--accent-teal); }
+        .service-card:nth-child(3) { border-top-color: var(--accent-purple); }
+        .service-card:nth-child(4) { border-top-color: var(--accent-blue); }
+        .service-card:nth-child(5) { border-top-color: var(--accent-gold); }
+        .service-card:nth-child(6) { border-top-color: var(--accent-pink); }
+        .service-card:active {
+            transform: scale(0.97);
+        }
+        .service-card i {
+            font-size: 2rem;
+            margin-bottom: 0.6rem;
+            transition: transform 0.3s;
+        }
+        .service-card:nth-child(1) i { color: var(--accent-orange); }
+        .service-card:nth-child(2) i { color: var(--accent-teal); }
+        .service-card:nth-child(3) i { color: var(--accent-purple); }
+        .service-card:nth-child(4) i { color: var(--accent-blue); }
+        .service-card:nth-child(5) i { color: var(--accent-gold); }
+        .service-card:nth-child(6) i { color: var(--accent-pink); }
+        .service-card h3 {
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+        .service-card p {
+            font-size: 0.8rem;
+            color: #666;
+            line-height: 1.3;
+        }
+
+        /* GALLERY */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .gallery-item {
+            position: relative;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+            cursor: pointer;
+            background: #e0e0e0;
+            aspect-ratio: 1 / 1;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        .gallery-item:active {
+            transform: scale(0.96);
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.4s;
+            filter: brightness(0.85);
+        }
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.75));
+            color: #fff;
+            padding: 1rem 0.5rem 0.5rem;
+            transform: translateY(100%);
+            transition: transform 0.3s;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+        .gallery-item:active .gallery-overlay {
+            transform: translateY(0);
+        }
+        .skeleton {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .gallery-item.loaded .skeleton {
+            display: none;
+        }
+
+        /* LIGHTBOX */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 4000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        .lightbox.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        .lightbox img {
+            max-width: 95%;
+            max-height: 85%;
+            border-radius: 8px;
+            transform: scale(0.85);
+            transition: transform 0.3s;
+            border: 2px solid var(--accent-gold);
+        }
+        .lightbox.open img {
+            transform: scale(1);
+        }
+        .lightbox .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2.5rem;
+            color: var(--accent-gold);
+            cursor: pointer;
+            z-index: 4001;
+            padding: 10px;
+        }
+
+        /* MAP */
+        .contact-wrapper {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .map-container {
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            border: 2px solid var(--accent-teal);
+            aspect-ratio: 16 / 10;
+            width: 100%;
+        }
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+        .contact-info {
+            background: linear-gradient(135deg, #fff 0%, #f0f4ff 100%);
+            padding: 1.8rem;
+            border-radius: 14px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+            border-left: 4px solid var(--accent-purple);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 160px;
+        }
+        .contact-info i {
+            color: var(--accent-teal);
+            width: 20px;
+            flex-shrink: 0;
+        }
+        .contact-info p {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        /* BACK TO TOP */
+        #backToTop {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-orange));
+            color: #fff;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 15px rgba(247,183,49,0.4);
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        #backToTop.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        #backToTop:active {
+            transform: scale(0.9);
+        }
+
+        /* FOOTER */
+        footer {
+            background: linear-gradient(135deg, #0f0f1a, #1a1a2e, #16213e);
+            color: #ecf0f1;
+            text-align: center;
+            padding: 2rem 5%;
+            position: relative;
+            overflow: hidden;
+        }
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-orange), var(--accent-pink), var(--accent-purple), var(--accent-teal));
+        }
+        footer h3 {
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 1.5rem;
+            margin-bottom: 0.3rem;
+        }
+        footer p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* ==================== */
+        /* 📱 20:9 PHONE STYLES */
+        /* ==================== */
+        @media (max-width: 430px) {
+            .hamburger {
+                display: flex;
+            }
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 56px;
+                left: 0;
+                background: rgba(15, 15, 26, 0.98);
+                width: 100%;
+                flex-direction: column;
+                padding: 1rem 5%;
+                gap: 0.8rem;
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                border-radius: 0 0 16px 16px;
+                margin: 0;
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .nav-links a {
+                font-size: 0.95rem;
+                padding: 0.5rem 0;
+                display: block;
+                width: 100%;
+            }
+
+            .hero {
+                min-height: 100vh;
+                min-height: 100dvh;
+                padding: 0 5%;
+            }
+            .hero h1 {
+                font-size: 2.5rem;
+                letter-spacing: 3px;
+            }
+            .hero h2 {
+                font-size: 1.2rem;
+            }
+            .hero p {
+                font-size: 0.9rem;
+            }
+
+            section {
+                padding: 3rem 4%;
+            }
+            .section-title {
+                font-size: 1.5rem;
+                margin-bottom: 1.8rem;
+            }
+            .section-title::after {
+                width: 60px;
+                height: 3px;
+            }
+
+            .card-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.6rem;
+            }
+            .machine-card {
+                min-height: 110px;
+                padding: 1rem 0.6rem;
+            }
+            .machine-card h3 {
+                font-size: 0.8rem;
+            }
+            .machine-card .spec {
+                font-size: 0.7rem;
+                padding: 0.3rem 0.6rem;
+            }
+
+            .service-card {
+                min-height: 130px;
+                padding: 1.2rem 0.6rem;
+            }
+            .service-card i {
+                font-size: 1.8rem;
+            }
+            .service-card h3 {
+                font-size: 0.8rem;
+            }
+            .service-card p {
+                font-size: 0.7rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.6rem;
+            }
+            .stat-item {
+                min-height: 100px;
+                padding: 1.2rem 0.8rem;
+            }
+            .stat-number {
+                font-size: 2rem;
+            }
+            .stat-label {
+                font-size: 0.75rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.6rem;
+            }
+            .gallery-item {
+                aspect-ratio: 1 / 1;
+            }
+
+            .about-grid {
+                gap: 1rem;
+            }
+            .about-text, .firm-details {
+                padding: 1.5rem;
+                min-height: auto;
+            }
+            .about-text ul li {
+                font-size: 0.85rem;
+            }
+            .firm-details p {
+                font-size: 0.85rem;
+            }
+
+            .contact-wrapper {
+                gap: 1rem;
+            }
+            .contact-info {
+                padding: 1.5rem;
+                min-height: auto;
+            }
+            .contact-info p {
+                font-size: 0.85rem;
+            }
+
+            .btn {
+                padding: 0.7rem 1.8rem;
+                font-size: 0.9rem;
+            }
+
+            #backToTop {
+                width: 40px;
+                height: 40px;
+                bottom: 16px;
+                right: 16px;
+                font-size: 1rem;
+            }
+
+            .logo {
+                font-size: 0.95rem;
+                letter-spacing: 1px;
+            }
+        }
+
+        /* Larger phones & small tablets */
+        @media (min-width: 431px) and (max-width: 768px) {
+            .card-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+            .about-grid {
+                grid-template-columns: 1fr;
+                max-width: 600px;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                max-width: 600px;
+            }
+        }
+
+        /* Tablet & desktop */
+        @media (min-width: 769px) {
+            .card-grid {
+                grid-template-columns: repeat(3, 1fr);
+                max-width: 1000px;
+                gap: 1.2rem;
+            }
+            .about-grid {
+                grid-template-columns: 1fr 1fr;
+                max-width: 1000px;
+                gap: 2rem;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+                max-width: 1000px;
+            }
+            .gallery-grid {
+                grid-template-columns: repeat(3, 1fr);
+                max-width: 1000px;
+            }
+            .contact-wrapper {
+                grid-template-columns: 1fr 1fr;
+                max-width: 1000px;
+            }
+            section {
+                padding: 5rem 5%;
+            }
+            .logo {
+                font-size: 1.3rem;
+            }
+            .gallery-item:hover {
+                transform: scale(1.03);
+                border-color: var(--accent-gold);
+            }
+            .gallery-item:hover img {
+                filter: brightness(1.05);
+            }
+            .gallery-item:hover .gallery-overlay {
+                transform: translateY(0);
+            }
+            .machine-card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+            }
+            .service-card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+            }
+            .service-card:hover i {
+                transform: scale(1.15) rotate(-5deg);
+            }
+            .stat-item:hover {
+                transform: translateY(-4px);
+                background: rgba(255,255,255,0.18);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- PRELOADER -->
+    <div id="preloader">
+        <i class="fas fa-cog loader-gear"></i>
+        <span class="loader-text">LAAD INDUSTRIES</span>
+    </div>
+
+    <!-- SCROLL PROGRESS BAR -->
+    <div id="progressBar"></div>
+
+    <!-- NAVIGATION -->
+    <nav id="navbar">
+        <a href="#home" class="logo">LAAD INDUSTRIES</a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#machines">Machines</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="home">
+        <canvas id="particleCanvas"></canvas>
+        <div class="hero-content">
+            <h1 class="fade-in">Laad Industries</h1>
+            <h2 class="fade-in">Manufacturing Firm</h2>
+            <p class="fade-in typing-text" id="typingText"></p>
+            <a href="#contact" class="btn fade-in">Get in Touch</a>
+        </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="stats-section" id="stats">
+        <h2 class="section-title fade-in" style="color:#fff; -webkit-text-fill-color:#fff;">Why Laad Industries?</h2>
+        <div class="stats-grid">
+            <div class="stat-item fade-in">
+                <span class="stat-number" data-target="20">0</span>
+                <span class="stat-label">Years Experience</span>
+            </div>
+            <div class="stat-item fade-in">
+                <span class="stat-number" data-target="10">0</span>
+                <span class="stat-label">Advanced Machines</span>
+            </div>
+            <div class="stat-item fade-in">
+                <span class="stat-number" data-target="500">0</span>
+                <span class="stat-label">Projects Delivered</span>
+            </div>
+            <div class="stat-item fade-in">
+                <span class="stat-number" data-target="100">0</span>
+                <span class="stat-label">Happy Clients</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+        <h2 class="section-title fade-in">About Us</h2>
+        <div class="about-grid">
+            <div class="about-text fade-in">
+                <p><span class="about-highlight">Mr. Brahmanand Lad</span> provides engineering solutions in:</p>
+                <ul>
+                    <li><i class="fas fa-check-circle" style="color:#f7b731; margin-right:6px;"></i> Foundry Tools Design & Manufacturing</li>
+                    <li><i class="fas fa-check-circle" style="color:#2bcbba; margin-right:6px;"></i> Machining Fixtures Design & Manufacturing</li>
+                    <li><i class="fas fa-check-circle" style="color:#a55eea; margin-right:6px;"></i> Cutting Tools Selection & Turn‑Key Solutions</li>
+                </ul>
+                <p style="margin-top:0.8rem; font-size:0.9rem;">We deliver high‑volume, batch, and prototype precision machining with unmatched quality.</p>
+            </div>
+            <div class="firm-details fade-in">
+                <h3 style="color:#1a1a2e; margin-bottom:1rem; font-size:1.2rem;">Firm Details</h3>
+                <p><i class="fas fa-building"></i> <strong>Laad Industries</strong></p>
+                <p><i class="fas fa-map-marker-alt"></i> GAT No. 107, Plot No. 3, Savali, Sangli – 416436</p>
+                <p><i class="fas fa-map-pin"></i> M.I.D.C. Miraj – 416410</p>
+                <p><i class="fas fa-file-invoice"></i> GST: 27AJSPL2944D2ZZ</p>
+                <p><i class="fas fa-envelope"></i> balad@laadindustries.in</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- MACHINES -->
+    <section id="machines">
+        <h2 class="section-title fade-in">Our Machine Fleet</h2>
+        <div class="card-grid" id="machineGrid">
+            <!-- Filled by JS -->
+        </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section id="services">
+        <h2 class="section-title fade-in">What We Offer</h2>
+        <div class="card-grid" id="serviceGrid">
+            <!-- Filled by JS -->
+        </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section id="gallery">
+        <h2 class="section-title fade-in">Our Work in Pictures</h2>
+        <div class="gallery-grid" id="galleryGrid"></div>
+    </section>
+
+    <!-- CONTACT + MAP -->
+    <section id="contact">
+        <h2 class="section-title fade-in">Find Us</h2>
+        <div class="contact-wrapper">
+            <div class="map-container fade-in">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3818.3709611621753!2d74.6346703!3d16.8575342!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc123bd33f1b40b%3A0xd0cab64fe522f48a!2sLAAD%20INDUSTRIES!5e0!3m2!1sen!2sin!4v1782406368791!5m2!1sen!2sin" 
+                    style="border:0;" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    title="LAAD INDUSTRIES Location">
+                </iframe>
+            </div>
+            <div class="contact-info fade-in">
+                <h3 style="color:#1a1a2e; margin-bottom:1rem; font-size:1.2rem;">Contact Details</h3>
+                <p><i class="fas fa-map-marker-alt"></i> GAT No. 107, Plot No. 3, Savali, Sangli – 416436</p>
+                <p><i class="fas fa-phone"></i> <a href="tel:+919637770006" style="color:#2c3e50; text-decoration:none;">+91 9637770006</a></p>
+                <p><i class="fas fa-envelope"></i> balad@laadindustries.in</p>
+                <a href="https://maps.app.goo.gl/VSPXTu67nVVT24386?g_st=ic" target="_blank" class="btn" style="margin-top:1rem; display:inline-block;">Get Directions</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- BACK TO TOP -->
+    <button id="backToTop" title="Back to top" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- LIGHTBOX -->
+    <div class="lightbox" id="lightbox">
+        <span class="close-btn" id="closeLightbox">&times;</span>
+        <img id="lightboxImg" src="" alt="Gallery Image">
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <h3>Laad Industries</h3>
+        <p>Precision. Quality. Commitment.</p>
+    </footer>
+
+    <script>
+        // ========== PRELOADER ==========
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('preloader').classList.add('fade-out');
+            }, 700);
+        });
+
+        // ========== SCROLL PROGRESS BAR ==========
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+
+        // ========== NAVBAR SCROLL EFFECT ==========
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // ========== MOBILE MENU ==========
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+
+        hamburger.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            navLinks.classList.toggle('active');
+        });
+
+        const navLinkItems = navLinks.querySelectorAll('a');
+        navLinkItems.forEach(link => {
+            link.addEventListener('click', function(e) {
+                setTimeout(() => {
+                    navLinks.classList.remove('active');
+                }, 100);
+            });
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!navbar.contains(e.target) && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+            }
+        });
+
+        // ========== SMOOTH SCROLL FOR NAV LINKS ==========
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    e.preventDefault();
+                    const navHeight = navbar.offsetHeight;
+                    const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - navHeight - 10;
+
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // ========== SCROLL REVEAL ==========
+        const fadeElements = document.querySelectorAll('.fade-in');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        fadeElements.forEach(el => observer.observe(el));
+
+        // ========== TYPING EFFECT ==========
+        const typingElement = document.getElementById('typingText');
+        const textArray = [
+            'Precision Machining & Engineering',
+            'Foundry Tools Design & Manufacturing',
+            'High‑Volume Production Experts',
+            'M.I.D.C. Miraj – 416410'
+        ];
+        let textIndex = 0, charIndex = 0, isDeleting = false;
+        function typeEffect() {
+            const current = textArray[textIndex];
+            if (!isDeleting) {
+                typingElement.textContent = current.substring(0, charIndex + 1);
+                charIndex++;
+                if (charIndex === current.length) {
+                    isDeleting = true;
+                    setTimeout(typeEffect, 1500);
+                    return;
+                }
+            } else {
+                typingElement.textContent = current.substring(0, charIndex - 1);
+                charIndex--;
+                if (charIndex === 0) {
+                    isDeleting = false;
+                    textIndex = (textIndex + 1) % textArray.length;
+                }
+            }
+            setTimeout(typeEffect, isDeleting ? 40 : 80);
+        }
+        window.addEventListener('load', typeEffect);
+
+        // ========== COUNTER ANIMATION ==========
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counters = entry.target.querySelectorAll('.stat-number');
+                    counters.forEach(counter => {
+                        const target = +counter.getAttribute('data-target');
+                        let count = 0;
+                        const speed = target / 80;
+                        const updateCount = () => {
+                            if (count < target) {
+                                count += speed;
+                                counter.innerText = Math.ceil(count);
+                                requestAnimationFrame(updateCount);
+                            } else {
+                                counter.innerText = target + '+';
+                            }
+                        };
+                        updateCount();
+                    });
+                    counterObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        const statsGrid = document.querySelector('.stats-grid');
+        if (statsGrid) counterObserver.observe(statsGrid);
+
+        // ========== BACK TO TOP ==========
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // ========== PARTICLE NETWORK ==========
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particles = [];
+
+        function resizeCanvas() {
+            width = canvas.offsetWidth;
+            height = canvas.offsetHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.6;
+                this.vy = (Math.random() - 0.5) * 0.6;
+                this.radius = Math.random() * 2 + 0.8;
+                this.colors = ['#f7b731', '#fc5c65', '#2bcbba', '#a55eea', '#45aaf2'];
+                this.color = this.colors[Math.floor(Math.random() * this.colors.length)];
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+            }
+        }
+
+        function initParticles(num) {
+            particles = [];
+            const particleCount = window.innerWidth < 430 ? 40 : 70;
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+        initParticles();
+
+        function connectParticles() {
+            const maxDist = window.innerWidth < 430 ? 80 : 120;
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < maxDist) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(247,183,49,${0.1 * (1 - dist / maxDist)})`;
+                        ctx.lineWidth = 0.4;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            connectParticles();
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            initParticles();
+        });
+
+        // ========== RENDER MACHINE CARDS ==========
+        const machines = [
+            { name: 'VMC (BFW – CHAKRA)', spec: '1000×600×600 mm' },
+            { name: 'VMC (BFW – SOORAJ)', spec: '1280×700×700 mm' },
+            { name: 'CNC (JYOTI DX 250)', spec: 'Max OD 350, L 500 mm' },
+            { name: 'Pressure Dye Casting', spec: '120 Ton, 200 kg Furnace' },
+            { name: 'M1TR (Jasjeet)', spec: '1200×500 mm' },
+            { name: 'Surface Grinding', spec: '600×300 mm' },
+            { name: 'Tool & Cutter (Jones)', spec: 'Model 310N' },
+            { name: 'VMC (TAL Make)', spec: '1100×650×650 mm' },
+            { name: 'Milling (Rolex)', spec: '1200×500 mm' },
+            { name: 'Lathe (Ram Das)', spec: '9 ft length' },
+        ];
+
+        const machineGrid = document.getElementById('machineGrid');
+        machines.forEach(m => {
+            const card = document.createElement('div');
+            card.className = 'machine-card fade-in';
+            card.innerHTML = `<h3>${m.name}</h3><span class="spec">${m.spec}</span>`;
+            machineGrid.appendChild(card);
+        });
+
+        // ========== RENDER SERVICE CARDS ==========
+        const services = [
+            { icon: 'fa-cogs', title: 'Precision Machining', desc: 'High‑volume, batch & prototype components.' },
+            { icon: 'fa-tools', title: 'Cutting & Special Tools', desc: 'All types of cutting tools, dyes, patterns.' },
+            { icon: 'fa-wrench', title: 'Machine Spares', desc: 'Spares for Heller, Trevisan, Mazak, Mori Seiki.' },
+            { icon: 'fa-grip-lines', title: 'Soft/Hard Jaws', desc: 'Custom workholding jaws.' },
+            { icon: 'fa-oil-can', title: 'Hydraulic Fixtures', desc: 'Robust hydraulic workholding.' },
+            { icon: 'fa-hand-paper', title: 'Manual Fixtures', desc: 'Ergonomic manual holding solutions.' },
+        ];
+
+        const serviceGrid = document.getElementById('serviceGrid');
+        services.forEach(s => {
+            const card = document.createElement('div');
+            card.className = 'service-card fade-in';
+            card.innerHTML = `<i class="fas ${s.icon}"></i><h3>${s.title}</h3><p>${s.desc}</p>`;
+            serviceGrid.appendChild(card);
+        });
+
+        // ========== DYNAMIC GALLERY ==========
+        const totalImages = 6;
+        const galleryGrid = document.getElementById('galleryGrid');
+
+        for (let i = 1; i <= totalImages; i++) {
+            const src = `image${i}.png`;
+            const item = document.createElement('div');
+            item.className = 'gallery-item fade-in';
+            item.innerHTML = `
+                <div class="skeleton"></div>
+                <img src="${src}" alt="Laad Industries Gallery ${i}" loading="lazy"
+                     onload="this.parentElement.classList.add('loaded')"
+                     onerror="this.parentElement.classList.add('loaded'); this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="gallery-overlay" style="display:none;">
+                    📷 Add image${i}.png
+                </div>
+            `;
+            item.addEventListener('click', () => openLightbox(src));
+            galleryGrid.appendChild(item);
+        }
+
+        // Lightbox
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const closeLightbox = document.getElementById('closeLightbox');
+
+        function openLightbox(src) {
+            lightboxImg.src = src;
+            lightbox.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeLightboxFunc() {
+            lightbox.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+        closeLightbox.addEventListener('click', closeLightboxFunc);
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) closeLightboxFunc();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeLightboxFunc();
+        });
+
+        // Re-observe dynamically added elements
+        setTimeout(() => {
+            document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+        }, 100);
+    </script>
+</body>
+</html>
